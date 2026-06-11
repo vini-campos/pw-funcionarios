@@ -2,7 +2,7 @@
     mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
     $host = "localhost";
-    $banco = "site";
+    $banco = "Funcionario";
     $user = "root";
     $pass = "";
 
