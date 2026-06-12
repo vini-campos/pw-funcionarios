@@ -52,3 +52,15 @@ body{
     align-items: center;
     gap: 15px;
 }
+
+main .container {
+    max-width: 650px; /* ajuste esse valor conforme quiser */
+}
+
+.img-preview {
+    max-width: 200px;
+    max-height: 200px;
+    object-fit: cover;
+    border: 1px solid #ffffff;
+    border-radius: 5px;
+}

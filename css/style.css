@@ -118,6 +118,12 @@ body{
     background: #ffd555;
 }
 
+.foto-funcionario {
+    max-width: 200px;
+    max-height: 200px;
+    object-fit: cover;
+}
+
 /* Responsividade */
 @media (max-width: 992px){
 
