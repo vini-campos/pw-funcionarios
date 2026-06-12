@@ -12,8 +12,6 @@
     <nav class="site-navbar">
         <div class="container-fluid px-4">
             <div class="navbar-content">
-
-                <!-- Logo -->
                 <div class="navbar-brand-custom">
                     <img src="img/favicon.png" alt="Logo">
                     <span>Gerenciador de Funcionários</span>
@@ -22,7 +20,7 @@
         </div>
     </nav>
     <?php
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST'):
             try {
                 require 'conexao.php';
 
@@ -34,47 +32,95 @@
                 $arquivoDestino = $diretorioDestino . basename($_FILES['Image']['name']);
                 $arquivo = basename($_FILES['Image']['name']);
 
-                $sql = "INSERT INTO Funcionario (Nome, Endereco, Idade, DataNasc, Foto) VALUES ('$nome', '$endereco', '$idade', '$dataNasc', '$arquivo')";
-                $resultado = $conexao->query($sql);
+                $erros = [];
 
-                if (move_uploaded_file($_FILES['Image']['tmp_name'], $arquivoDestino)) {
-                    $mensagem = "O arquivo " . htmlspecialchars(basename($_FILES["Image"]["name"])) . " foi enviado.";
-                } else {
-                    $mensagem = "Aconteceu um erro durante o envio da sua imagem";
+                $data = new DateTime($dataNasc);
+                $hoje = new DateTime();
+                $idadeCalc = $hoje->diff($data)->y;
+
+                if (empty($nome) || strlen($nome) < 10) {
+                    $erros[] = "O campo nome está vazio ou incompleto";
+                }
+                if (empty($endereco) || strlen($endereco) < 5) {
+                    $erros[] = "O campo endereço está vazio ou incompleto";
+                }
+                if (!is_numeric($idade) || $idade < 18 || $idade > 70) {
+                    $erros[] = "A idade deve estar entre 18 e 70 anos";
+                }
+                if (empty($dataNasc) || $idadeCalc != $idade) {
+                    $erros[] = "A idade não corresponde à data de nascimento inserida";
+                }
+                if ($_FILES['Image']['error'] != UPLOAD_ERR_OK) {
+                    $erros[] = "O campo foto não pode estar vazio";
                 }
 
-                echo <<<ALERT
-                    <div class="modal" tabindex="-1">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">Cadastrado com sucesso!</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <p><?php $mensagem?></p>
-                                </div>
-                                <div class="modal-footer">
-                                    <a href="index.php" class="btn btn-primary">Início</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                ALERT;
-
             } catch(Exception $e) {
-                echo <<<ALERT
-                    <div class="alert alert-danger container alert-dismissible fade show" role="alert">
-                        <h2>Aconteceu um erro:<br>
-                            {$e->getMessage()}
-                        </h2>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        <a href="index.php" class="btn btn-primary">Voltar</a>
-                    </div>\n
-                ALERT;
+                $erros[] = "Aconteceu um erro: " . $e->getMessage();
             }
-        }
+        endif;
     ?>
+
+    <?php if (!empty($erros)): ?>
+        <div class="modal" id="Modal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title">Erro ao cadastrar!</h5>
+                    </div>
+                    <div class="modal-body">
+                        <ul>
+                            <?php foreach ($erros as $erro): ?>
+                                <li><?= htmlspecialchars($erro) ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const modal = new bootstrap.Modal(document.getElementById('Modal'));
+                modal.show();
+            });
+        </script>
+
+    <?php elseif ($_SERVER['REQUEST_METHOD'] == 'POST'): ?>
+        <?php
+            $sql = "INSERT INTO Funcionario (Nome, Endereco, Idade, DataNasc, Foto) VALUES ('$nome', '$endereco', '$idade', '$dataNasc', '$arquivo')";
+            $conexao->query($sql);
+
+            if (move_uploaded_file($_FILES['Image']['tmp_name'], $arquivoDestino)) {
+                $mensagem = "O arquivo " . htmlspecialchars(basename($_FILES["Image"]["name"])) . " foi enviado.";
+            } else {
+                $mensagem = "Aconteceu um erro durante o envio da sua imagem.";
+            }
+        ?>
+        <div class="modal" id="Modal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-success text-white">
+                        <h5 class="modal-title">Cadastrado com sucesso!</h5>
+                    </div>
+                    <div class="modal-body">
+                        <p><?= $mensagem ?></p>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="index.php" class="btn btn-primary">Início</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const modal = new bootstrap.Modal(document.getElementById('Modal'));
+                modal.show();
+            });
+        </script>
+    <?php endif; ?>
+
     <main>
         <div class="container mt-5">
             <form action="incluir.php" method="post" enctype="multipart/form-data">
@@ -97,7 +143,6 @@
                 <div class="mb-3">
                     <label for="Image" class="form-label">Foto</label>
                     <input type="file" class="form-control" name="Image" id="Image" accept="image/*" required>
-                    <!-- Preview logo abaixo -->
                     <div id="preview-container" style="display:none; margin-top: 10px;">
                         <img class="img-preview img-fluid rounded" id="preview-img" src="" alt="Preview da foto">
                     </div>
@@ -115,8 +160,8 @@
             </form>
         </div>
     </main>
+
     <script>
-        //preview da foto
         document.getElementById('Image').addEventListener('change', function (e) {
             const file = e.target.files[0];
             if (!file) return;
@@ -129,6 +174,6 @@
             reader.readAsDataURL(file);
         });
     </script>
-    <script src="js/bootstrap.bunble.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
