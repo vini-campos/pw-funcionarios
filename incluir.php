@@ -70,7 +70,7 @@
                     <div class="modal-body">
                         <ul>
                             <?php foreach ($erros as $erro): ?>
-                                <li><?= htmlspecialchars($erro) ?></li>
+                                <li><?php echo $erro;?></li>
                             <?php endforeach; ?>
                         </ul>
                     </div>
