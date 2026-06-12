@@ -4,77 +4,113 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/bootstrap.min.css">
-    <title>Site_2ano</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="shortcut icon" href="img/favicon.png" type="image/x-icon">
+    <title>Gerenciador de funcionários</title>
 </head>
-<body class="bg-light">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="#">
-                Site de Pw
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">Início</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Produtos</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Contato</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-     <main class="container my-5 flex-grow-1">
-        <div class="row justify-content-center">
-            <div class="col-md-6 col-lg-4">
-                <div class="card shadow border-0">
-                    <img src="https://picsum.photos/500/300"
-                        class="card-img-top"
-                        alt="Imagem">
-                    <div class="card-body">
-                        <h4 class="card-title">
-                            Notebook Gamer
-                        </h4>
-                        <p class="card-text text-muted">
-                            Ideal para jogos, programação e tarefas de alto desempenho.
-                        </p>
-                        <ul class="list-group list-group-flush mb-3">
-                            <li class="list-group-item">Ryzen 7 7800X</li>
-                            <li class="list-group-item">16GB RAM</li>
-                            <li class="list-group-item">SSD 512GB</li>
-                            <li class="list-group-item">RTX 4060</li>
-                        </ul>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="fs-5 fw-bold text-success">
-                                R$ 5.499,90
-                            </span>
-                            <button class="btn btn-primary">
-                                Comprar
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
-    <footer class="bg-dark text-white py-4 mt-auto">
-        <div class="container text-center">
-            <p class="mb-1">
-                © 2026 Todos os direitos reservados.
-            </p>
+<body>
 
-            <small class="text-secondary">
-                Legenda
-            </small>
+<nav class="site-navbar">
+    <div class="container-fluid px-4">
+        <div class="navbar-content">
+
+            <!-- Logo -->
+            <div class="navbar-brand-custom">
+                <img src="img/favicon.png" alt="Logo">
+                <span>Gerenciador de Funcionários</span>
+            </div>
+
+            <!-- Área da direita -->
+            <div class="nav-right">
+
+                <div class="search-wrap">
+                    <input type="text"
+                           class="search-input"
+                           placeholder="Buscar usuário...">
+
+                    <button class="search-btn">
+                        Pesquisar
+                    </button>
+                </div>
+
+                <a href="incluir.php" class="btn add-btn">
+                    Cadastrar
+                </a>
+
+            </div>
+
         </div>
-    </footer>
-    <script src="js/bootstrap.bundle.min.js"></script>
+    </div>
+</nav>
+<main>
+    <?php
+        try {
+            require 'conexao.php';
+
+            $sql = "SELECT * FROM Funcionario ORDER BY Id";
+            $query = $conexao->query($sql);
+
+            while($dados = mysqli_fetch_array($query)) {
+                
+                $dt = new DateTime($dados['DataNasc'], new DateTimeZone("America/Sao_Paulo"));
+                $data = $dt->format("d/m/Y");
+
+                // para aparecer o usuario ainda é preciso fazer o insert manual no banco
+
+                echo <<< CARD
+                    <div class="container mt-4">
+
+                        <div class="card shadow-sm funcionario-card">
+                            <div class="row g-0">
+
+                                <!-- Foto -->
+                                <div class="col-md-3 text-center p-3">
+                                    <img src="uploads/{$dados['Foto']}" alt="Foto do funcionário: {$dados['Nome']}" class="img-fluid rounded foto-funcionario">
+                                </div>
+
+                                <div class="col-md-9">
+                                    <div class="card-body">
+
+                                        <h5 class="card-title mb-3"> {$dados['Nome']} </h5>
+
+                                        <div class="row">
+
+                                            <div class="col-sm-6 mb-2">
+                                                <strong>ID:</strong> {$dados['Id']}
+                                            </div>
+
+                                            <div class="col-sm-6 mb-2">
+                                                <strong>Idade:</strong> {$dados['Idade']}
+                                            </div>
+
+                                            <div class="col-sm-6 mb-2">
+                                                <strong>Endereço:</strong> {$dados['Endereco']}
+                                            </div>
+
+                                            <div class="col-sm-6 mb-2">
+                                                <strong>Data de nascimento:</strong> {$data}
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                CARD;
+
+            }
+
+        } catch(Exception $e) {
+            echo "fazer a mensagem de erro correta!!!";
+        }
+
+    ?>
+</main>
+
+<script src="js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
