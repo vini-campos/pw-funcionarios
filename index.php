@@ -22,17 +22,13 @@
 
             <!-- Área da direita -->
             <div class="nav-right">
-
+                <!--filtro-->
                 <div class="search-wrap">
-                    <input type="text"
-                           class="search-input"
-                           placeholder="Buscar usuário...">
-
-                    <button class="search-btn">
-                        Pesquisar
-                    </button>
+                    <form action="#" method="post">
+                        <input type="search" class="search-input" name="filtro" placeholder="Procurar funcionário...">
+                        <input type="submit" class="search-btn" value="Pesquisar">
+                    </form>
                 </div>
-
                 <a href="incluir.php" class="btn add-btn">
                     Cadastrar
                 </a>
@@ -47,15 +43,21 @@
         try {
             require 'conexao.php';
 
-            $sql = "SELECT * FROM Funcionario ORDER BY Id";
+            $sql = "";
+            if ($_SERVER['REQUEST_METHOD'] == "POST") {
+                $filtro = $_POST['filtro'];
+                $sql = "SELECT * FROM Funcionario WHERE Nome LIKE '%$filtro%' ORDER BY Id";
+            }
+            else {
+                $sql = "SELECT * FROM Funcionario ORDER BY Id";
+            }
+
             $query = $conexao->query($sql);
 
             while($dados = mysqli_fetch_array($query)) {
                 
                 $dt = new DateTime($dados['DataNasc'], new DateTimeZone("America/Sao_Paulo"));
                 $data = $dt->format("d/m/Y");
-
-                // para aparecer o usuario ainda é preciso fazer o insert manual no banco
 
                 echo <<< CARD
                     <div class="container mt-4">
