@@ -1,16 +1,21 @@
 :root {
     --nav-bg: #164788;
-    --nav-text: #fff;
     --nav-border: rgba(255,255,255,.2);
     --nav-height: 60px;
+    --accent: #2D7DD2;
+    --accent-dark: #1f62b0;
+    --danger: #C0392B;
+    --danger-soft: #FDF0EF;
+    --border: #E0E4EA;
 }
 
-body{
+body {
     margin: 0;
+    font-family: sans-serif;
 }
 
-/* Navbar */
-.site-navbar{
+/* ── Navbar ── */
+.site-navbar {
     background: var(--nav-bg);
     min-height: var(--nav-height);
     position: sticky;
@@ -20,8 +25,7 @@ body{
     align-items: center;
 }
 
-/* Conteúdo da navbar */
-.navbar-content{
+.navbar-content {
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -29,8 +33,7 @@ body{
     gap: 20px;
 }
 
-/* Logo */
-.navbar-brand-custom{
+.navbar-brand-custom {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -40,84 +43,89 @@ body{
     font-weight: 600;
 }
 
-.navbar-brand-custom img{
+.navbar-brand-custom img {
     width: 40px;
     height: 40px;
     object-fit: contain;
 }
 
-/* Área direita */
-.nav-right{
+.nav-right {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 8px;
 }
 
-/* Pesquisa */
-.search-wrap{
+/* ── Search — input e btn unidos ── */
+.search-wrap form {
     display: flex;
-    align-items: center;
-    gap: 10px;
+    align-items: stretch;
 }
 
-.search-input{
-    width: 300px;
-    height: 40px;
-    padding: 0 15px;
-    border: 1px solid var(--nav-border);
-    border-radius: 10px;
+.search-input {
+    width: 280px;
+    height: 38px;
+    padding: 0 14px;
+    border: 1px solid rgba(255,255,255,.18);
+    border-right: none;
+    border-radius: 5px 0 0 5px;
     outline: none;
-    background: rgba(255,255,255,.15);
+    background: rgba(255,255,255,.1);
     color: white;
+    font-family: inherit;
+    font-size: 13px;
+    transition: background .15s;
 }
 
-.search-input::placeholder{
-    color: rgba(255,255,255,.7);
+.search-input::placeholder {
+    color: rgba(255,255,255,.42);
 }
 
-.search-input:focus{
-    background: rgba(255,255,255,.25);
+.search-input:focus {
+    background: rgba(255,255,255,.18);
 }
 
-/* Botão pesquisar */
-.search-btn{
-    height: 40px;
-    padding: 0 18px;
-    border: none;
-    border-radius: 10px;
-    background: white;
-    color: #000000;
+.search-btn {
+    height: 38px;
+    padding: 0 16px;
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: 0 5px 5px 0;
+    background: rgba(255,255,255,.14);
+    color: rgba(255,255,255,.9);
+    font-family: inherit;
+    font-size: 13px;
     font-weight: 600;
     cursor: pointer;
-    transition: .2s;
+    white-space: nowrap;
+    transition: background .15s;
 }
 
-.search-btn:hover{
-    background: #c9c8c8;
+.search-btn:hover {
+    background: rgba(255,255,255,.24);
 }
 
-/* Botão adicionar */
-.add-btn{
-    height: 40px;
+/* ── Botão cadastrar ── */
+.add-btn {
+    height: 38px;
     padding: 0 18px;
-    border: none;
-    border-radius: 10px;
-    background: #ffc107;
-    color: #000;
+    border-radius: 5px;
+    background: var(--accent);
+    color: #fff;
+    font-family: inherit;
+    font-size: 13px;
     font-weight: 600;
     text-decoration: none;
-
     display: flex;
     align-items: center;
-    justify-content: center;
-
-    transition: .2s;
+    gap: 6px;
+    white-space: nowrap;
+    transition: background .15s;
 }
 
-.add-btn:hover{
-    background: #ffd555;
+.add-btn:hover {
+    background: var(--accent-dark); color: #fff;
 }
 
+/* ── Page ── */
 .page-wrap {
     max-width: 960px;
     margin: 0 auto;
@@ -132,17 +140,28 @@ body{
     padding-bottom: 16px;
     border-bottom: 1px solid var(--border);
 }
- 
+
 .page-title {
     font-size: 16px;
     font-weight: 600;
-    color: var(--text);
     margin: 0;
 }
- 
+
 .page-count {
     font-size: 12px;
-    color: var(--text-muted);
+    color: #7A8899;
+}
+
+/* ── Card ── */
+.funcionario-card {
+    transition: box-shadow .18s, border-color .18s, transform .18s;
+    border: 1px solid var(--border) !important;
+}
+
+.funcionario-card:hover {
+    box-shadow: 0 4px 20px rgba(0,0,0,.10) !important;
+    border-color: #b0bbc9 !important;
+    transform: translateY(-2px);
 }
 
 .foto-funcionario {
@@ -151,28 +170,89 @@ body{
     object-fit: cover;
 }
 
-/* Responsividade */
-@media (max-width: 992px){
+/* ── Botões de ação do card ── */
+.card-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px 20px 16px 0;
+    justify-content: center;
+}
 
-    .navbar-content{
+.btn-editar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 96px;
+    height: 34px;
+    border-radius: 5px;
+    background: var(--accent);
+    color: #fff;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: background .15s;
+}
+
+.btn-editar:hover {
+    background: var(--accent-dark); color: #fff;
+}
+
+.btn-deletar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 96px;
+    height: 34px;
+    border-radius: 5px;
+    background: var(--danger-soft);
+    color: var(--danger);
+    border: 1px solid #f0c4c0;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .15s, color .15s, border-color .15s;
+}
+
+.btn-deletar:hover {
+    background: var(--danger);
+    color: #fff;
+    border-color: var(--danger);
+}
+
+/* ── Responsivo ── */
+@media (max-width: 992px) {
+    .navbar-content {
         flex-direction: column;
         padding: 15px 0;
     }
 
-    .nav-right{
+    .nav-right {
         width: 100%;
         flex-direction: column;
     }
 
-    .search-wrap{
+    .search-wrap,
+    .search-wrap form {
         width: 100%;
     }
 
-    .search-input{
+    .search-input {
+        flex: 1;
         width: 100%;
     }
 
-    .add-btn{
+    .add-btn {
         width: 100%;
+        justify-content: center;
+    }
+
+    .card-actions {
+        flex-direction: row;
+        padding: 0 0 16px 16px;
     }
 }

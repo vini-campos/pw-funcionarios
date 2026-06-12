@@ -54,7 +54,7 @@ body{
 }
 
 main .container {
-    max-width: 650px; /*laterais do form*/
+    max-width: 600px; /*laterais do form*/
 }
 
 .form-control:focus {
