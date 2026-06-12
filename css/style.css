@@ -1,0 +1,145 @@
+:root {
+    --nav-bg: #164788;
+    --nav-text: #fff;
+    --nav-border: rgba(255,255,255,.2);
+    --nav-height: 60px;
+}
+
+body{
+    margin: 0;
+}
+
+/* Navbar */
+.site-navbar{
+    background: var(--nav-bg);
+    min-height: var(--nav-height);
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+    display: flex;
+    align-items: center;
+}
+
+/* Conteúdo da navbar */
+.navbar-content{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Logo */
+.navbar-brand-custom{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: white;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.navbar-brand-custom img{
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+}
+
+/* Área direita */
+.nav-right{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Pesquisa */
+.search-wrap{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.search-input{
+    width: 300px;
+    height: 40px;
+    padding: 0 15px;
+    border: 1px solid var(--nav-border);
+    border-radius: 10px;
+    outline: none;
+    background: rgba(255,255,255,.15);
+    color: white;
+}
+
+.search-input::placeholder{
+    color: rgba(255,255,255,.7);
+}
+
+.search-input:focus{
+    background: rgba(255,255,255,.25);
+}
+
+/* Botão pesquisar */
+.search-btn{
+    height: 40px;
+    padding: 0 18px;
+    border: none;
+    border-radius: 10px;
+    background: white;
+    color: #000000;
+    font-weight: 600;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.search-btn:hover{
+    background: #c9c8c8;
+}
+
+/* Botão adicionar */
+.add-btn{
+    height: 40px;
+    padding: 0 18px;
+    border: none;
+    border-radius: 10px;
+    background: #ffc107;
+    color: #000;
+    font-weight: 600;
+    text-decoration: none;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition: .2s;
+}
+
+.add-btn:hover{
+    background: #ffd555;
+}
+
+/* Responsividade */
+@media (max-width: 992px){
+
+    .navbar-content{
+        flex-direction: column;
+        padding: 15px 0;
+    }
+
+    .nav-right{
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .search-wrap{
+        width: 100%;
+    }
+
+    .search-input{
+        width: 100%;
+    }
+
+    .add-btn{
+        width: 100%;
+    }
+}

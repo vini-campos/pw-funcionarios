@@ -1,0 +1,54 @@
+:root {
+    --nav-bg: #164788;
+    --nav-text: #fff;
+    --nav-border: rgba(255,255,255,.2);
+    --nav-height: 60px;
+}
+
+body{
+    margin: 0;
+}
+
+/* Navbar */
+.site-navbar{
+    background: var(--nav-bg);
+    min-height: var(--nav-height);
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+    display: flex;
+    align-items: center;
+}
+
+/* Conteúdo da navbar */
+.navbar-content{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Logo */
+.navbar-brand-custom{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: white;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.navbar-brand-custom img{
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+}
+
+/* Área direita */
+.nav-right{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
