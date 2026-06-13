@@ -1,10 +1,11 @@
 <?php
     mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
-    $host = "localhost";
-    $banco = "Funcionario";
-    $user = "root";
-    $pass = "";
+                                   //credenciais para usar no host do site
+    $host = "localhost";           //$host = "sql302.infinityfree.com";  
+    $banco = "funcionario";        //$banco = "if0_42176059_funcionario";
+    $user = "root";                //$user = "if0_42176059";
+    $pass = "";                    //$pass = "LuisFlavio";
 
     try {
         $conexao = new mysqli($host, $user, $pass, $banco);
