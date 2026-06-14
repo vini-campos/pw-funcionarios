@@ -1,5 +1,5 @@
-CREATE DATABASE Funcionario
-USE Funcionario
+CREATE DATABASE Funcionario;
+USE Funcionario;
 
 CREATE TABLE Funcionario(
     Id INT AUTO_INCREMENT PRIMARY KEY,
