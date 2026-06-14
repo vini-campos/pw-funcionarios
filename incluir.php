@@ -26,7 +26,7 @@
 
                 $nome = $_POST['Nome'];
                 $endereco = $_POST['Endereco'];
-                $idade = $_POST['Idade'];
+                $email = $_POST['Email'];
                 $dataNasc = $_POST['DataNasc'];
                 $diretorioDestino = "uploads/";
                 $arquivoDestino = $diretorioDestino . basename($_FILES['Image']['name']);
@@ -38,17 +38,17 @@
                 $hoje = new DateTime();
                 $idadeCalc = $hoje->diff($data)->y;
 
-                if (empty($nome) || strlen($nome) < 10) {
+                if (empty($nome) || strlen($nome) < 5) {
                     $erros[] = "O campo nome está vazio ou incompleto";
                 }
                 if (empty($endereco) || strlen($endereco) < 5) {
                     $erros[] = "O campo endereço está vazio ou incompleto";
                 }
-                if (!is_numeric($idade) || $idade < 18 || $idade > 70) {
-                    $erros[] = "A idade deve estar entre 18 e 70 anos";
+                if (empty($dataNasc)) {
+                    $erros[] = "O campo data de nascimento está vazio";
                 }
-                if (empty($dataNasc) || $idadeCalc != $idade) {
-                    $erros[] = "A idade não corresponde à data de nascimento inserida";
+                elseif ($idadeCalc < 18 || $idadeCalc > 70) {
+                    $erros[] = "O funcionário deve ter entre 18 e 70 anos";
                 }
                 if ($_FILES['Image']['error'] != UPLOAD_ERR_OK) {
                     $erros[] = "O campo foto não pode estar vazio";
@@ -89,7 +89,8 @@
 
     <?php elseif ($_SERVER['REQUEST_METHOD'] == 'POST'): ?>
         <?php
-            $sql = "INSERT INTO Funcionario (Nome, Endereco, Idade, DataNasc, Foto) VALUES ('$nome', '$endereco', '$idade', '$dataNasc', '$arquivo')";
+            $sql = "INSERT INTO Funcionario (Nome, Endereco, Idade, DataNasc, Foto, Email)
+                VALUES ('$nome', '$endereco', '$idadeCalc', '$dataNasc', '$arquivo', '$email')";
             $conexao->query($sql);
 
             if (move_uploaded_file($_FILES['Image']['tmp_name'], $arquivoDestino)) {
@@ -126,19 +127,20 @@
             <form action="incluir.php" method="post" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label for="Nome" class="form-label">Nome completo</label>
-                    <input type="text" class="form-control" name="Nome" placeholder="Nome do Funcionário" required>
+                    <input type="text" class="form-control" name="Nome" placeholder="Nome do Funcionário..." required>
+                </div>
+                <div class="mb-3">
+                    <label for="Email" class="form-label">Email</label>
+                    <input type="email" class="form-control" name="Email" placeholder="Email do Funcionário..." required>
                 </div>
                 <div class="mb-3">
                     <label for="Endereco" class="form-label">Endereço</label>
-                    <input type="text" class="form-control" name="Endereco" placeholder="Endereço do Funcionário" required>
-                </div>
-                <div class="mb-3">
-                    <label for="Idade" class="form-label">Idade</label>
-                    <input type="number" class="form-control" name="Idade" placeholder="Idade do Funcionário" min="18" max="70" required>
+                    <input type="text" class="form-control" name="Endereco" placeholder="Endereço do Funcionário..." required>
                 </div>
                 <div class="mb-3">
                     <label for="DataNasc" class="form-label">Data de nascimento</label>
-                    <input type="date" class="form-control" name="DataNasc" placeholder="Data de nascimento do Funcionário" min="1900-01-01" max="2010-12-31" required>
+                    <input type="date" class="form-control" name="DataNasc" placeholder="Data de nascimento do Funcionário..."
+                        min="1900-01-01" max="2010-12-31" required>
                 </div>
                 <div class="mb-3">
                     <label for="Image" class="form-label">Foto</label>

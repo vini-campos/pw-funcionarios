@@ -38,36 +38,38 @@
                 $dados = $resultado->fetch_assoc();
 
                 $nome = $dados['Nome'];
+                $email = $dados['Email'];
                 $endereco = $dados['Endereco'];
-                $idade = $dados['Idade'];
                 $dataNasc = $dados['DataNasc'];
                 $foto = $dados['Foto'];
 
             } else {
 
                 $nome = $_POST['Nome'];
+                $email = $_POST['Email'];
                 $endereco = $_POST['Endereco'];
-                $idade = $_POST['Idade'];
                 $dataNasc = $_POST['DataNasc'];
 
                 $erros = [];
 
-                // calculo da idade
+                // Calculo da idade a partir da data de nascimento
                 $data = new DateTime($dataNasc);
                 $hoje = new DateTime();
                 $idadeCalc = $hoje->diff($data)->y;
 
-                if (empty($nome) || strlen($nome) < 10) {
+                if (empty($nome) || strlen($nome) < 5) {
                     $erros[] = "O campo nome está vazio ou incompleto";
+                }
+                if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                    $erros[] = "O campo e-mail é inválido";
                 }
                 if (empty($endereco) || strlen($endereco) < 5) {
                     $erros[] = "O campo endereço está vazio ou incompleto";
                 }
-                if (!is_numeric($idade) || $idade < 18 || $idade > 70) {
-                    $erros[] = "A idade deve estar entre 18 e 70 anos";
-                }
-                if (empty($dataNasc) || $idadeCalc != $idade) {
-                    $erros[] = "A idade não corresponde à data de nascimento inserida";
+                if (empty($dataNasc)) {
+                    $erros[] = "O campo data de nascimento está vazio";
+                } elseif ($idadeCalc < 18 || $idadeCalc > 70) {
+                    $erros[] = "O funcionário deve ter entre 18 e 70 anos";
                 }
 
                 if (!empty($erros)):
@@ -82,7 +84,7 @@
                                 <div class="modal-body">
                                     <ul>
                                         <?php foreach ($erros as $erro): ?>
-                                            <li><?php echo $erro;?></li>
+                                            <li><?php echo $erro; ?></li>
                                         <?php endforeach; ?>
                                     </ul>
                                 </div>
@@ -103,13 +105,13 @@
                     if ($_FILES['Foto']['error'] == UPLOAD_ERR_NO_FILE) {
                         $foto = $_POST['FotoAtual'];
                     } else {
-                        $diretorioDestino = "uploads/";
-                        $arquivoDestino = $diretorioDestino . basename($_FILES['Foto']['name']);
-                        $foto = basename($_FILES['Foto']['name']);
+                        $arquivo = basename($_FILES['Foto']['name']);
+                        $arquivoDestino = "uploads/" . $arquivo;
+                        $foto = $arquivo;
                         move_uploaded_file($_FILES['Foto']['tmp_name'], $arquivoDestino);
                     }
 
-                    $sql = "UPDATE Funcionario SET Nome='$nome', Endereco='$endereco', Idade=$idade, DataNasc='$dataNasc', Foto='$foto' WHERE Id=$id";
+                    $sql = "UPDATE Funcionario SET Nome='$nome', Email='$email', Endereco='$endereco', Idade=$idadeCalc, DataNasc='$dataNasc', Foto='$foto' WHERE Id=$id";
                     $conexao->query($sql);
                 ?>
                     <div class="modal" tabindex="-1" id="Modal">
@@ -146,7 +148,7 @@
                             <h5 class="modal-title">Ocorreu um erro!</h5>
                         </div>
                         <div class="modal-body">
-                            <p><?php echo $e->getMessage();?></p>
+                            <p><?php echo $e->getMessage(); ?></p>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
@@ -164,38 +166,36 @@
 
     <main>
         <div class="container mt-5">
-            <form action="editar.php?Id=<?php echo $_GET['Id'];?>" method="post" enctype="multipart/form-data">
+            <form action="editar.php?Id=<?php echo $_GET['Id']; ?>" method="post" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label class="form-label">Nome completo</label>
-                    <input type="text" class="form-control" name="Nome" value="<?php echo $nome;?>" required>
+                    <input type="text" class="form-control" name="Nome" value="<?php echo $nome; ?>" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" name="Email" value="<?php echo $email; ?>" required>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Endereço</label>
-                    <input type="text" class="form-control" name="Endereco" value="<?php echo $endereco;?>" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Idade</label>
-                    <input type="number" class="form-control" name="Idade" value="<?php echo $idade;?>" min="18" max="70" required>
+                    <input type="text" class="form-control" name="Endereco" value="<?php echo $endereco; ?>" required>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Data de nascimento</label>
-                    <input type="date" class="form-control" name="DataNasc" value="<?php echo $dataNasc;?>" min="1900-01-01" max="2010-12-31" required>
+                    <input type="date" class="form-control" name="DataNasc" value="<?php echo $dataNasc; ?>" min="1900-01-01" max="2010-12-31" required>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Foto</label>
                     <input type="file" class="form-control" name="Foto" id="Foto" accept="image/*">
                     <div style="margin-top: 10px;">
-                        <img class="img-preview img-fluid rounded" id="preview-img"
-                             src="uploads/<?php echo $foto;?>"
-                             alt="Preview da foto"
-                             style="max-width: 200px; max-height: 200px; object-fit: cover;">
+                        <img class="img-preview img-fluid rounded" id="preview-img" src="uploads/<?php echo $foto; ?>" alt="Preview da foto"
+                            style="max-width: 200px; max-height: 200px; object-fit: cover;">
                     </div>
                 </div>
                 <div class="mb-3 form-check">
                     <input type="checkbox" class="form-check-input" required>
                     <label class="form-check-label">Desejo enviar os dados inseridos</label>
                 </div>
-                <input type="hidden" name="FotoAtual" value="<?php echo $foto;?>">
+                <input type="hidden" name="FotoAtual" value="<?php echo $foto; ?>">
                 <button type="submit" class="btn btn-outline-primary btn-sm" style="margin-right: 15px;">
                     Salvar alterações
                 </button>
@@ -205,6 +205,7 @@
             </form>
         </div>
     </main>
+
     <script>
         document.getElementById('Foto').addEventListener('change', function (e) {
             const file = e.target.files[0];
