@@ -9,3 +9,5 @@ CREATE TABLE Funcionario(
     DataNasc DATE,
     Foto VARCHAR(50)
 );
+
+ALTER TABLE Funcionario ADD Email VARCHAR(100);
