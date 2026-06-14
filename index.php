@@ -56,6 +56,19 @@
             <span class="page-count"><?php echo $total;?> Registros</span>
         </div>
 
+        <?php if ($total == 0): ?>
+            <div class="container mt-4">
+                <div class="card shadow-sm funcionario-card text-center p-5">
+                    <div class="card-body">
+                        <img src="img/n_encontrado_icon.png" alt="Nenhum registro" width="64" class="mb-3">
+                        <h5 style="font-size: 16px; font-weight: 600; color: #7A8899;">Nenhum funcionário encontrado</h5>
+                        <p style="font-size: 13px; color: #7A8899;" class="mb-4">Cadastre um novo funcionário para começar.</p>
+                        <a href="incluir.php" class="add-btn" style="display: inline-flex; width: fit-content; margin: 0 auto;">Cadastrar funcionário</a>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
+
         <?php while ($dados = mysqli_fetch_array($query)):
             $dt = new DateTime($dados['DataNasc'], new DateTimeZone("America/Sao_Paulo"));
             $data = $dt->format("d/m/Y");
@@ -86,6 +99,9 @@
                                 </div>
                                 <div class="col-sm-6 mb-2">
                                     <strong>Endereço:</strong> <?php echo $dados['Endereco'];?>
+                                </div>
+                                <div class="col-sm-6 mb-2">
+                                    <strong>Email:</strong> <?php echo $dados['Email'];?>
                                 </div>
                                 <div class="col-sm-6 mb-2">
                                     <strong>Nascimento:</strong> <?php echo $data;?>
