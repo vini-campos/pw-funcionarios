@@ -4,7 +4,7 @@
 
     $id = base64_decode($_GET['Id']);
 
-    $sql = "DELETE FROM funcionario WHERE Id = $id";
+    $sql = "DELETE FROM Funcionario WHERE Id = $id";
 
     $conexao->query($sql);
 

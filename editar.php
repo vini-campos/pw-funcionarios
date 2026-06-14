@@ -109,7 +109,7 @@
                         move_uploaded_file($_FILES['Foto']['tmp_name'], $arquivoDestino);
                     }
 
-                    $sql = "UPDATE funcionario SET Nome='$nome', Endereco='$endereco', Idade=$idade, DataNasc='$dataNasc', Foto='$foto' WHERE Id=$id";
+                    $sql = "UPDATE Funcionario SET Nome='$nome', Endereco='$endereco', Idade=$idade, DataNasc='$dataNasc', Foto='$foto' WHERE Id=$id";
                     $conexao->query($sql);
                 ?>
                     <div class="modal" tabindex="-1" id="Modal">
